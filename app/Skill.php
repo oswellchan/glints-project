@@ -12,6 +12,6 @@ class Skill extends Model
 
     public function books()
     {
-        return $this->hasMany('App\Book');
+        return $this->hasMany('App\Book', 'skill');
     }
 }

@@ -15,16 +15,17 @@ use App\Http\Requests;
 class ScrapeController extends Controller
 {
     //
-    public function scrape()
+    public function scrape(Request $request)
     {
+    	if (!$request->input('skill')) 
+    	{
+    		return view('scrape.index');
+    	}
+
+    	$skill = $request->input('skill');
     	$default = ini_get('max_execution_time');
 		set_time_limit(1000);
-    	$skill = 'javascript';
-    	if (!isset($skill) || empty($skill)) 
-    	{
-    		echo error;
-    		return;
-    	}
+    	
     	$skill = trim($skill);
     	$URL = "https://www.amazon.com/s/?field-keywords=" . strtolower($skill);
     	libxml_use_internal_errors(true);
@@ -39,11 +40,11 @@ class ScrapeController extends Controller
 				$searchKey = array('title'=>$result['title'], 'author'=>$result['author'], 'skill'=>$skillModel->id);
 				Book::updateOrCreate($searchKey, $result);
 			}
-			return;
+			return redirect('/book?skill='.$skill);
 		}
 		else 
 		{
-		  echo "Error in downloading the webPagen";
+		  return view('scrape.index', ['error' => 'Error occurred scraping Amazon']);
 		}
 		set_time_limit($default);
     }
@@ -57,7 +58,6 @@ class ScrapeController extends Controller
 			$results = array();
 			$i = 0;
 			$resultId = "result_" . $i;
-
 			while($element = $dom->getElementById($resultId)) 
 			{
 				$bookURL = "";
@@ -112,11 +112,14 @@ class ScrapeController extends Controller
 				    $authorURL = 'https://www.amazon.com' . $container->getAttribute("href");
 				}
 				$elements = $finder->query('.//div/div/div/div[contains(@class," a-col-right")]/div[@class="a-row"]/div[contains(@class," a-span7")]/div', $element);
-				$inner = $finder->query('.//a/span', $elements->item(1));
+				$inner = $finder->query('.//a/span', $elements->item(1));			
 				foreach($inner as $container) 
 				{
 				    $price = $container->textContent;
-				    $result['price'] = substr($price, 1);
+				    echo $price;
+				    if (!empty($price) && $price != 'to rent') {
+				    	$result['price'] = substr($price, 1);
+				    }
 				}
 				$elements = $finder->query('.//div/div/div/div[contains(@class," a-col-right")]/div[@class="a-row"]/div[contains(@class," a-span-last")]/div[contains(@class,"a-row ")]', $element);
 				$inner = $finder->query('.//span/span/a/i/span', $elements->item(0));

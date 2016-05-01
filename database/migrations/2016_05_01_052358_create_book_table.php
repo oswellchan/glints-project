@@ -17,8 +17,8 @@ class CreateBookTable extends Migration
             $table->string('title');
             $table->integer('skill');
             $table->string('author');
-            $table->string('author_bio');
-            $table->string('description');
+            $table->string('author_bio', 5000);
+            $table->string('description', 5000);
             $table->float('price');
             $table->float('rating');
             $table->string('img_url');

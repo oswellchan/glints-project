@@ -11,6 +11,13 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/book', 'BookController@index');
+
+Route::get('/scrape', 'ScrapeController@scrape');
+
+Route::get('/skills', 'SkillController@index');
+
+Route::resource('api', 'APIController',
+	['except' => 'edit', 'create']);
+
+Route::get('/', 'BookController@index');
