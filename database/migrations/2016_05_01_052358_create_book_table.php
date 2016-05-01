@@ -12,10 +12,10 @@ class CreateBookTable extends Migration
      */
     public function up()
     {
-        Schema::create('book', function (Blueprint $table) {
+        Schema::create('books', function (Blueprint $table) {
             $table->increments('id');
             $table->string('title');
-            $table->string('skill');
+            $table->integer('skill');
             $table->string('author');
             $table->string('author_bio');
             $table->string('description');
@@ -23,8 +23,9 @@ class CreateBookTable extends Migration
             $table->float('rating');
             $table->string('img_url');
             $table->string('book_url');
-            $table->timestamp('crawled_at');
             $table->timestamps();
+
+            $table->foreign('skill')->references('id')->on('skills');
         });
     }
 
@@ -35,6 +36,6 @@ class CreateBookTable extends Migration
      */
     public function down()
     {
-        Schema::drop('book');
+        Schema::drop('books');
     }
 }
