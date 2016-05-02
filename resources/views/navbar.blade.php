@@ -16,7 +16,6 @@
       <ul class="nav navbar-nav">
         <li><a href="/skills">Skills</a></li>
         <li><a href="/scrape">Scrape</a></li>
-        <li><a href="#">API</a></li>
       </ul>
       <form class="navbar-form navbar-left" action="/book" method="get">
         <div class="form-group">

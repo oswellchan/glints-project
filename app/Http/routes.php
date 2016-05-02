@@ -17,7 +17,7 @@ Route::get('/scrape', 'ScrapeController@scrape');
 
 Route::get('/skills', 'SkillController@index');
 
-Route::resource('api', 'APIController',
+Route::resource('api/book', 'APIController',
 	['except' => 'edit', 'create']);
 
 Route::get('/', 'BookController@index');
