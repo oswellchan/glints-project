@@ -1,27 +1,48 @@
-# Laravel PHP Framework
+# Glints Scraping Project
 
-[![Build Status](https://travis-ci.org/laravel/framework.svg)](https://travis-ci.org/laravel/framework)
-[![Total Downloads](https://poser.pugx.org/laravel/framework/d/total.svg)](https://packagist.org/packages/laravel/framework)
-[![Latest Stable Version](https://poser.pugx.org/laravel/framework/v/stable.svg)](https://packagist.org/packages/laravel/framework)
-[![Latest Unstable Version](https://poser.pugx.org/laravel/framework/v/unstable.svg)](https://packagist.org/packages/laravel/framework)
-[![License](https://poser.pugx.org/laravel/framework/license.svg)](https://packagist.org/packages/laravel/framework)
+### Server Requirements
+- PHP 7.0.0
+- Composer 1.0
+- MySQL 5.5.9
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as authentication, routing, sessions, queueing, and caching.
+### Local Server Setup
+- Run `composer install`
+- Copy `.env.example` to `.env`
+- Edit `.env` to fit your configuration (Create the db, set the db info inside `.env`)
+- if you need, create a new user & database in mysql:
+  * Run `mysql` or `mysql -u root -p`
+  * Enter password for root, if any
+  * `CREATE DATABASE homestead;`
+  * `CREATE USER 'homestead'@'localhost' IDENTIFIED BY 'secret';`
+  * `GRANT ALL PRIVILEGES ON * . * TO 'homestead'@'localhost';`
+  * `FLUSH PRIVILEGES;`
+  * `exit` to exit mysql command line control.
+- Run `php artisan key:generate` to generate key for application
+- Run `php artisan migrate` to migrate the database
 
-Laravel is accessible, yet powerful, providing tools needed for large, robust applications. A superb inversion of control container, expressive migration system, and tightly integrated unit testing support give you the tools you need to build any application with which you are tasked.
+### Start Server
+- Run `php artisan serve --port 3000`
 
-## Official Documentation
+###Web Interface
+* `/` and `/book` - shows all books
+* `/book?skill=exampleSkill` - shows all books related to `exampleSkill`
+* `/skills` - shows all scraped skills
+* `/scrape` - interface for scraping skill from Amazon
+* `/scrape?skill=exampleSkill` - scrapes first page of book results from Amazon related to `exampleSkill`
 
-Documentation for the framework can be found on the [Laravel website](http://laravel.com/docs).
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](http://laravel.com/docs/contributions).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
+###API Interface
+* `GET /api/book` - returns all books in JSON format
+* `GET /api/book?skill=exampleSkill` - returns all books related to `examepleSkill` in JSON format
+* `GET /api/book/id` - returns book with id = `id` in JSON format
+* `POST /api/book` - inserts a new book into the database. Parameters for the book are as below. It is advised to supply all parameters but only `skill` is compulsory.
+  *  `title`: title of book
+  *  `skill`: skill related to book **(COMPULSORY)**
+  *  `author`: author of book
+  *  `author_bio`: author's bio
+  *  `description`: description of book
+  *  `price`: price of book. value in numbers. omit `$` sign
+  *  `rating`: rating of book. maximum rating of 5
+  *  `img_url`: url to img of book's cover
+  *  `book_url`: url to book on Amazon
+* `PUT/PATCH /api/book/id` - updates book with id = `id` with the relevant attributes as above
+* `DELETE /api/book/id` - updates book with id = `id`
